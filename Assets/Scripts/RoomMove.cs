@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomMove : MonoBehaviour
 {
@@ -8,6 +9,12 @@ public class RoomMove : MonoBehaviour
     public Vector3 playerChange;
     private CameraMovement cam;
 
+    public bool needText;
+    public string placeName;
+    public GameObject text;
+    public Text placeText;
+
+    //changes limit size of camera when changing rooms 
     public Vector2 cameraChangeMax;
     public Vector2 cameraChangeMin;
 
@@ -27,6 +34,7 @@ public class RoomMove : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //changes limit size of camera when changing rooms 
             cam.minPosition.x = cameraChangeMin.x;
             cam.minPosition.y = cameraChangeMin.y;
             cam.maxPosition.x = cameraChangeMax.x;
@@ -36,8 +44,19 @@ public class RoomMove : MonoBehaviour
             cam.minPosition += cameraChange;
             cam.maxPosition += cameraChange;
             other.transform.position += playerChange;
-
+            if (needText)
+            {
+                StartCoroutine(placeNameCo());
+            }
 
         }
+    }
+
+    private IEnumerator placeNameCo()
+    {
+        text.SetActive(true);
+        placeText.text = placeName;
+        yield return new WaitForSeconds(4f);
+        text.SetActive(false);
     }
 }
